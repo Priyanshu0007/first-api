@@ -6,6 +6,7 @@ const orderRoutes=require('./api/routes/orders')
 const mongoose = require('mongoose');
 const morgan = require('morgan');
 mongoose.connect('mongodb+srv://Mrx:'+ process.env.MONGO_ATLAS_PASSWORD +'@cluster.sq7orxw.mongodb.net/?retryWrites=true&w=majority');
+mongoose.Promise=global.Promise;
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
 app.use(morgan('dev'))
