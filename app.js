@@ -3,7 +3,9 @@ const bodyParser = require('body-parser');
 const app=express();
 const productRoutes=require('./api/routes/products')
 const orderRoutes=require('./api/routes/orders')
+const mongoose = require('mongoose');
 const morgan = require('morgan');
+mongoose.connect('mongodb+srv://Mrx:'+ process.env.MONGO_ATLAS_PASSWORD +'@cluster.sq7orxw.mongodb.net/?retryWrites=true&w=majority');
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
 app.use(morgan('dev'))
@@ -14,6 +16,7 @@ app.use((req,res,next)=>{
         res.header("Access-Control-Allow-MEthods","PUT,POST,PATCH,DELETE,GET");
         return res.status(200).json({})
     }
+    next();
 })
 app.use('/products',productRoutes)
 app.use('/orders',orderRoutes)
