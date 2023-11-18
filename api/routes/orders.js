@@ -3,6 +3,7 @@ const router=express.Router();
 const mongoose = require('mongoose');
 const Order=require("../models/order");
 const Product=require("../models/product")
+const checkAuth=require("../middleware/check-auth")
 router.get('/',(req,res,next)=>{
     Order.find().select("product quantity _id").populate("product","name").exec().then(docs=>{
         res.status(200).json({
@@ -23,7 +24,7 @@ router.get('/',(req,res,next)=>{
         res.status(500).json({error:err})
     })
 })
-router.post('/',(req,res,next)=>{
+router.post('/',checkAuth,(req,res,next)=>{
     Product.findById(req.body.productId).then(product=>{
         if(!product){return res.status(404).json({message:"Product not found"})}
         order.save().then(result=>{
@@ -70,7 +71,7 @@ router.get('/:orderID',(req,res,next)=>{
         })
     })
 })
-router.delete('/:orderID',(req,res,next)=>{
+router.delete('/:orderID',checkAuth,(req,res,next)=>{
     Order.deleteOne({_id:req.params.orderID}).exec().then(result=>{
         res.status(200).json({
             message:"Order deleted",
